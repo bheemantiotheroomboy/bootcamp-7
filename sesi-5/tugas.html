@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Daftar Produk</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+  <h2 class="mb-4">Daftar Produk</h2>
+
+  <!-- Filter & Search -->
+  <div class="row g-3 mb-4">
+    <div class="col-md-4">
+      <input type="text" id="searchInput" class="form-control" placeholder="Cari produk...">
+    </div>
+
+    <div class="col-md-3">
+      <select id="categoryFilter" class="form-select">
+        <option value="all">Semua Kategori</option>
+        <option value="elektronik">Elektronik</option>
+        <option value="fashion">Fashion</option>
+        <option value="makanan">Makanan</option>
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <select id="priceSort" class="form-select">
+        <option value="default">Urutkan Harga</option>
+        <option value="low">Harga Terendah</option>
+        <option value="high">Harga Tertinggi</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Produk -->
+  <div class="row" id="productList"></div>
+</div>
+
+<script>
+const products = [
+  {
+    name: "Laptop Asus",
+    description: "Laptop untuk kerja dan gaming ringan",
+    price: 8500000,
+    category: "elektronik",
+    image: "https://picsum.photos/300?random=1"
+  },
+  {
+    name: "Kaos Polos",
+    description: "Kaos nyaman dipakai sehari-hari",
+    price: 120000,
+    category: "fashion",
+    image: "https://picsum.photos/300?random=2"
+  },
+  {
+    name: "Headphone",
+    description: "Suara jernih dan bass mantap",
+    price: 450000,
+    category: "elektronik",
+    image: "https://picsum.photos/300?random=3"
+  },
+  {
+    name: "Sepatu Sneakers",
+    description: "Sepatu stylish dan nyaman",
+    price: 600000,
+    category: "fashion",
+    image: "https://picsum.photos/300?random=4"
+  },
+  {
+    name: "Cokelat Premium",
+    description: "Cokelat enak kualitas terbaik",
+    price: 95000,
+    category: "makanan",
+    image: "https://picsum.photos/300?random=5"
+  }
+];
+
+const productList = document.getElementById("productList");
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+const priceSort = document.getElementById("priceSort");
+
+function renderProducts(data) {
+  productList.innerHTML = "";
+
+  if (data.length === 0) {
+    productList.innerHTML = `<p class="text-center">Produk tidak ditemukan</p>`;
+    return;
+  }
+
+  data.forEach(product => {
+    productList.innerHTML += `
+      <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm">
+          <img src="${product.image}" class="card-img-top" alt="${product.name}">
+          <div class="card-body">
+            <h5 class="card-title">${product.name}</h5>
+            <p class="card-text">${product.description}</p>
+            <p class="fw-bold text-primary">Rp ${product.price.toLocaleString()}</p>
+            <span class="badge bg-secondary">${product.category}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  });
+}
+
+function filterProducts() {
+  let filtered = [...products];
+
+  const search = searchInput.value.toLowerCase();
+  const category = categoryFilter.value;
+  const sort = priceSort.value;
+
+  // Search
+  if (search) {
+    filtered = filtered.filter(p =>
+      p.name.toLowerCase().includes(search)
+    );
+  }
+
+  // Filter kategori
+  if (category !== "all") {
+    filtered = filtered.filter(p => p.category === category);
+  }
+
+  // Sort harga
+  if (sort === "low") {
+    filtered.sort((a, b) => a.price - b.price);
+  } else if (sort === "high") {
+    filtered.sort((a, b) => b.price - a.price);
+  }
+
+  renderProducts(filtered);
+}
+
+// Event
+searchInput.addEventListener("input", filterProducts);
+categoryFilter.addEventListener("change", filterProducts);
+priceSort.addEventListener("change", filterProducts);
+
+// Initial render
+renderProducts(products);
+</script>
+
+</body>
+</html>
