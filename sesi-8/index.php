@@ -17,7 +17,7 @@
                 <div class="col-md-6 mx-auto">
                     <h1 class="text-center mt-5">Form Input Product</h1>
                     <!-- Form Input product -->
-                    <form id="productForm" action="proses.php" method="post" onsubmit="return validateForm()">
+                    <form id="productForm" action="proses.php" method="post" onsubmit="return validateForm()" enctype="multipart/form-data">
                         <div class="mb-3">
                             <label for="NAME" class="form-label">NAME</label>
                             <input type="text" class="form-control" id="NAME" name="NAME" placeholder="Enter product name" required>
